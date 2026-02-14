@@ -1,6 +1,8 @@
 import pandas as pd
 from sqlalchemy import create_engine, text
+from pathlib import Path
 
+BASE_DIR = Path(__file__).resolve().parent
 
 file_list = [
     "Album.csv", "Artist.csv", "Customer.csv", "Employee.csv", 
@@ -10,13 +12,13 @@ file_list = [
 
 # PostgreSQL connection string
 engine = create_engine(
-    ""
+    "postgresql://postgres:VtpkeZFGdLVgaAryorLqIiIxSHqqkyNv@gondola.proxy.rlwy.net:12215/railway"
 )
 
 
 for file in file_list:
     try:
-        temp_df = pd.read_csv(file)
+        temp_df = pd.read_csv(BASE_DIR / file)
         
         table_name = file.split('.')[0]
         
