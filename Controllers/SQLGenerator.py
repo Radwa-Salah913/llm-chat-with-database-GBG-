@@ -32,13 +32,14 @@ class SQLGenerator:
             2- Important : the tables were created via pandas.
                     - if columns are Mixescase, use double quotes around them in the query.
                     - write the actualy name of the table in double quotes.
-                    - get the columns name and tables name from the provided schema EXACTLY as it is, do not make up any column or table name that is not in the schema.
+                    - You MUST use table names and column names EXACTLY as they appear in the provided schema.
+
                     
             3- ONLY return the sql query , without any explanation or comments   
             4- If date columns are stored as TEXT, cast them explicitly using ::DATE or ::TIMESTAMP   
             5- write a query that can help you understand the question better by exploring the data before get the final query.  
         
-            CRITICAL RULE (MANDATORY):
+            CRITICAL RULES (MANDATORY):
             1- For any column representing names (e.g., Name, FirstName, LastName, ArtistName):
 
                 - You MUST use ILIKE with '%' wildcards.
@@ -55,11 +56,18 @@ class SQLGenerator:
 
                     Use the database-stored value in the WHERE clause.
 
-                3- Evaluate your generated query based on the above rules, attached schema and, the postgreSQL Syntax, if you find any violation, rewrite the query to fix it.        
-                4- GET the columns name and tables name from the provided schema EXACTLY as it is.
+            3- Evaluate your generated query based on the above rules, attached schema and, the postgreSQL Syntax, if you find any violation, rewrite the query to fix it.        
+                
+            4- You MUST use table names and column names EXACTLY as they appear in the provided schema.
+
+                    - Do NOT change capitalization.
+                    - Do NOT pluralize or singularize.
+                    - Do NOT rename.
+                    - Do NOT infer similar names.
+                    - Do NOT use synonyms.
+                    - Do NOT modify underscores or formatting.
             """
         )
-
         self.chain = self.sql_prompt | self.llm | self.parser
 
     def generate_sql(self, question: str) -> str:
@@ -73,8 +81,4 @@ class SQLGenerator:
 
     @staticmethod
     def clean_sql(sql: str) -> str:
-        return (
-            sql.replace("```sql", "")
-               .replace("```", "")
-               .strip()
-        )
+        return ( sql.replace("```sql", "").replace("```", "").strip())
