@@ -19,9 +19,10 @@ class Decomposition():
        GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
        llm = ChatGoogleGenerativeAI(model = "gemini-2.5-flash", google_api_key=GOOGLE_API_KEY, temperature=0.0)
 
+       self.description = get_description(self.schema, llm)
        self.llm = llm.with_structured_output(SubQuestion)
        self.schema = get_schema()
-       self.description = get_description()
+      
        self.json_schema = json.dumps(SubQuestion.model_json_schema(), ensure_ascii=False)
 
        self.decompose_prompt = PromptTemplate(
@@ -67,7 +68,7 @@ class Decomposition():
 
             """
        )
-       self.chain = self.decompose_prompt | self.llm | self.parser
+       self.chain = self.decompose_prompt | self.llm 
 
 
     def decompose(self, question):

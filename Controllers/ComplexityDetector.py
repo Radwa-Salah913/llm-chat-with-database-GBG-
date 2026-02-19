@@ -9,11 +9,13 @@ from Models.get_description import get_description
 class ComplexityDetector():
     def __init__(self):
        load_dotenv()
-       self.GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-       self.llm = ChatGoogleGenerativeAI(model = "gemini-1.5-flash", google_api_key=self.GOOGLE_API_KEY, temperature=0.5)
+       GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+
+       self.llm = ChatGoogleGenerativeAI(model = "gemini-2.5-flash", google_api_key=GOOGLE_API_KEY, temperature=0.0)
        self.parser = StrOutputParser()
        self.schema = get_schema()
-       self.description = get_description()
+       self.description = get_description(self.schema, self.llm)
+
        self.detector_prompt = PromptTemplate(
            input_variables=["question","schema","description"],
            template="""
@@ -22,10 +24,10 @@ class ComplexityDetector():
                 - SIMPLE (can be answered with one SQL query)
                 - COMPLEX (requires multiple reasoning steps)
 
-              Return only one word.
+              Return ONLY one word.
             """
        )
        self.chain = self.detector_prompt | self.llm | self.parser
 
     def detect(self, question):
-        return self.chain.invoke(question=question, schema=self.schema, description=self.description)
+        return self.chain.invoke({"question": question, "schema": self.schema, "description": self.description})

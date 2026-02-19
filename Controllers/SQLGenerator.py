@@ -25,10 +25,10 @@ class SQLGenerator:
             template="""
             you are an expert postgressSQL data analyst.
             here is the database schema contain tables name, columns name, data type for each column and, 
-            an example value for each column in the schema: {schema}.
-            here is the description of each column in the database: {description}.
+            an example value for each column in the schema.
+            here is the description of each column in the database .
             Your task:
-            1- Write ONLY a postgressSQl query to answer the following question: {question}.
+            1- Write ONLY a postgressSQl query to answer the following question.
             2- Important : the tables were created via pandas.
                     - if columns are Mixescase, use double quotes around them in the query.
                     - write the actualy name of the table in double quotes.
@@ -66,6 +66,32 @@ class SQLGenerator:
                     - Do NOT infer similar names.
                     - Do NOT use synonyms.
                     - Do NOT modify underscores or formatting.
+                    - If the user uses synonyms, map them to the correct table name
+
+                Terminology Mapping:
+                    - client → Customer
+                    - clients → Customer
+                    - buyer → Customer
+                    - buyers → Customer
+                    - users → Customer
+
+            -------------------------
+            DATABASE SCHEMA:
+            <SCHEMA>
+            {schema}
+            </SCHEMA>
+
+            -------------------------
+            TABLE DESCRIPTIONS:
+            <DESCRIPTION>
+            {description}
+            </DESCRIPTION>
+
+            -------------------------
+            USER QUESTION:
+            {question}
+
+
             """
         )
         self.chain = self.sql_prompt | self.llm | self.parser
