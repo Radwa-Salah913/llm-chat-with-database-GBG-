@@ -15,7 +15,7 @@ This project demonstrates how to use a large language model (LLM) to interact wi
 
 - Generates natural language answers from query results.
  
-
+------------------------------------------------------------------------------------------------------
 
 ### System Architecture
 
@@ -50,7 +50,7 @@ Retrieves the database schema, including table names, column names, data types, 
 Generates concise descriptions for each column in the database schema based on the column name, data type, and example value.
 
 
-
+-----------------------------------------------------------------------------------------------------
 
 
 ## Installation
@@ -76,7 +76,7 @@ Generates concise descriptions for each column in the database schema based on t
    streamlit run app.py
    ```
 
-
+-------------------------------------------------------------------------
 ### How It Works
 
 - User enters a question about the database.
@@ -104,3 +104,22 @@ Generates concise descriptions for each column in the database schema based on t
       - Collect all results
 
       - Generate final combined answer
+
+---------------------------------------------------------------------------------------------------
+
+## Alternative Approach: Using LangChain SQL Toolkit Directly
+
+In addition to the multi-step pipeline, this project also supports a direct approach using LangChain’s built-in SQL Agent Toolkit.
+
+### This approach allows the system to:
+
+- Interpret the user’s natural language question.
+
+- Automatically generate and execute SQL queries.
+
+- Return a final answer without explicitly exposing the SQL steps.
+
+## Deploy the app using streamlit.
+```bash
+streamlit run SQL_TOOLKIT.py
+   ```
